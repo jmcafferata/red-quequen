@@ -1,0 +1,206 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+@font-face {
+  font-family: "Jakarta Regular";
+  src: url("PlusJakartaSans-Regular.ttf");
+}
+@font-face {
+  font-family: "Jakarta Light Italic";
+  src: url("PlusJakartaSans-LightItalic.ttf");
+}
+@font-face {
+  font-family: "Jakarta Extra Bold";
+  src: url("PlusJakartaSans-ExtraBold.ttf");
+}
+body {
+  background-image: url("bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#app-container {
+  /* app container */
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 0px;
+  gap: 63px;
+
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+/* hide  scrollbar */
+#results::-webkit-scrollbar {
+  display: none;
+}
+#main-interface {
+  /* Main interface */
+
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 32px;
+  max-height: 80vh;
+  
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+#results{
+  display: none;
+  max-height: 50vh;
+  overflow: scroll;
+  line-height: 150%;
+}
+.app-title {
+  /* Find the software you need */
+
+  text-align: center;
+  font-family: "Jakarta Regular";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 40px;
+
+  color: #080f30;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+}
+.app-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 36px 24px 36px;
+  gap: 36px;
+  border: solid 1px #38386a;
+  width: 564px;
+  font-family: "Jakarta Regular";
+  background: rgba(31, 38, 51, 0.01);
+  backdrop-filter: blur(99.5px);
+  /* Note: backdrop-filter has minimal browser support */
+
+  border-radius: 24px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  align-self: stretch;
+  flex-grow: 0;
+}
+.message-input {
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 36px;
+
+  width: 492px;
+  height: 32.5px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  align-self: stretch;
+  flex-grow: 0;
+}
+.input-field {
+  /* Auto layout */
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px;
+  gap: 10px;
+
+  width: 424px;
+  height: 25px;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 0;
+  flex-grow: 1;
+}
+input{
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: "Jakarta Extra Bold";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 25px;
+  color: #111124;
+}
+/*placeholder*/
+input::placeholder {
+  color: #3e3e57;
+  font-family: "Jakarta Light Italic";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 25px;
+}
+.message-input button {
+ /* no style */
+  background: none;
+  border: none;
+  outline: none;
+}
+.message-input button:hover {
+  /* no style */
+  cursor: pointer;
+ }
+.input-field button img {
+  /* Vector */
+
+  width: 32px;
+  height: 32.5px;
+
+  border: 1px solid ;
+
+  /* Inside auto layout */
+
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+    color: #080f30;
+    -webkit-text-fill-color:#080f30 !important
+}
+
+
+.loading{
+  width: 32px;
+  height: 32px;
+}
