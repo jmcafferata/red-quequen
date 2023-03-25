@@ -2,3 +2,6 @@ Flask
 openai
 pandas
 numpy
+matplotlib
+plotly
+scikit-learn

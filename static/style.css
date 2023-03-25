@@ -73,7 +73,7 @@ body {
   font-family: "Jakarta Regular";
   font-style: normal;
   font-weight: 500;
-  font-size: 16px;
+  font-size: 18x;
   line-height: 40px;
 
   color: #080f30;
@@ -83,6 +83,16 @@ body {
   flex: none;
   order: 0;
   flex-grow: 0;
+}
+
+a.phone-link{
+  
+  display: inline-block;
+  color: white;
+  background: #14728c;
+  padding: 2px 6px;
+  border-radius: 6px;
+  text-decoration: none;
 }
 .app-main {
   display: flex;
@@ -203,4 +213,5 @@ input:-webkit-autofill:active {
 .loading{
   width: 32px;
   height: 32px;
+  filter: invert(1) sepia(1) hue-rotate(120deg);
 }
