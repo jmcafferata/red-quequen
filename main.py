@@ -93,7 +93,7 @@ def get_information(message):
     # desactivá esto si vas a correr el programa localmente. si no, activá esto y desactivá las dos líneas de arriba
     # use pandas.concat to add the response (which is a csv row of mensaje,nombre,telefono) to the csv in utf-8
     mensajes_df = mensajes_df.append({'fecha': now.strftime("%d/%m/%Y %H:%M:%S"), 'mensaje': message, 'embedding': str(message_vector)}, ignore_index=True)
-    write_csv_to_gcs(mensajes_df, "demanda.csv")
+    write_csv_to_gcs(mensajes_df, "mensajes.csv")
 
     return response
     
