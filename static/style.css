@@ -21,60 +21,35 @@ body {
   background-size: cover;
   /* make the bg image scale from the bottom */
   background-position: bottom;
-  height: 100%;
-  width: 100%; /* Added */
+  overscroll-behavior: contain;
 }
 
-#section {
+.content-wrapper{
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh; /* Updated */
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+  gap: 36px;
 }
 
-#app-container {
-  /* app container */
-
-  /* Auto layout */
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 0px;
-  gap: 63px;
-
-  position: relative;
-  max-width: 100%;
-  width: 100%;
-}
 /* hide  scrollbar */
 #results::-webkit-scrollbar {
   display: none;
 }
-#main-interface {
-  /* Main interface */
-
-  /* Auto layout */
-
+#app-box{
+  width: 100%;
+  padding: 16px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 0px;
-  gap: 32px;
-  max-height: 80vh;
-
-  /* Inside auto layout */
-
-  flex: none;
-  order: 0;
-  flex-grow: 0;
+  justify-content: center;
 }
 #results {
   display: none;
   max-height: 50vh;
   overflow: scroll;
   line-height: 150%;
+  white-space: pre-wrap;
 }
 .app-title {
   /* Find the software you need */
@@ -95,6 +70,19 @@ body {
   flex-grow: 0;
 }
 
+.title-container{
+  font-family: "Jakarta Regular";
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-logo{
+  max-width: 200px;
+  margin-bottom: 32px;
+}
+
 a.phone-link {
   display: inline-block;
   color: white;
@@ -103,6 +91,7 @@ a.phone-link {
   border-radius: 6px;
   text-decoration: none;
 }
+
 .app-main {
   display: flex;
   flex-direction: column;
@@ -225,7 +214,7 @@ input:-webkit-autofill:active {
 .loading {
   width: 32px;
   height: 32px;
-  filter: sepia(100%) saturate(300%) brightness(20%) hue-rotate(180deg);
+  filter: sepia(100%) saturate(500%) brightness(55%) hue-rotate(137deg)
 }
 
 textarea {
@@ -265,38 +254,35 @@ textarea::placeholder {
 
 /* ++++++++++++++++++ mobile +++++++++++++++++++ */
 @media screen and (max-width: 768px) {
+
   body {
     background-image: url("mobile.jpg");
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    height: 100vh;
+    overflow: hidden;
+   
+
   }
 
-  #section {
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    height: 100%; /* Updated */
-  }
-
-  #app-container {
-    flex-direction: column;
-    gap: 0px;
-    justify-content: end;
-  }
-
-  #main-interface {
+  .content-wrapper {
+    position: fixed;
     width: 100%;
-    gap: 0px;
-    max-height: 100%;
+  }
+
+  
+  #app-box {
+    max-height: 80%;
+  }
+
+  .title-container {
   }
   
-  .app-title {
-    position: relative;
-    font-size: 16px;
-    margin-bottom: 64px;
+  
+  .app-logo{
+    max-width: 200px;
+    margin-bottom: 32px;
   }
   .app-main {
     position: relative;
@@ -345,8 +331,4 @@ textarea::placeholder {
     font-family: "Jakarta Light Italic";
     color: #080f30;
   }
-  /* title horizontally centered and near the top */
-  .title-container {
-  }
-
 }

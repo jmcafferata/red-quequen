@@ -10,6 +10,9 @@ from datetime import datetime
 from google.cloud import storage
 from io import StringIO
 from ast import literal_eval
+import pytz
+timezone = pytz.timezone('America/Argentina/Buenos_Aires')
+
 
 app = Flask(__name__)
 
@@ -52,7 +55,6 @@ def get_information(message):
 
     # get embedding for message
     message_vector = get_embedding(message, 'text-embedding-ada-002')
-    print('message_vector: ', message_vector)
     # parse embedding column ////// update: son todos lists, no hace falta
     # oferta_sim['embedding'] = oferta_sim['embedding'].apply(lambda x: x[1:-1].strip('()').split(','))
     
@@ -64,9 +66,15 @@ def get_information(message):
     oferta_sim = oferta_sim.sort_values(by=['similarity'], ascending=False)
     print('oferta_sim: ', oferta_sim)
 
-    now = datetime.now()
+    now = datetime.now(timezone)
+    
+    mensajes = 'Mensajes previos:\n\n'
 
-    prompt = 'Sos un bot argentino, buena onda y amable (con dialecto argentino) que tiene información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada:\n\n'+oferta_sim[['fecha','mensaje']].head(20).to_string(index=False)+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable, un poco revolucionario. Te divierte muchoque Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos."'
+    for index, row in oferta_sim[['fecha', 'mensaje']].head(30).iterrows():
+        mensajes += str(row['fecha']) + ' - ' + str(row['mensaje']) + '\n\n'
+        
+
+    prompt = 'Sos Red Quequén, un bot argentino, buena onda y amable (con dialecto argentino) que recibe y entrega información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%A %d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada. Cada mensaje tiene la fecha y hora en que la persona lo envió, y eso también es útil para informar.\n\n'+mensajes+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable, un poco revolucionario. Te divierte muchoque Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos. Recordale a la gente que agregue información útil para que Quequén prospere. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje."'
     print(prompt)
     response = openai.ChatCompletion.create(
         model="gpt-4",
@@ -97,9 +105,9 @@ def get_information(message):
     
     # if the response starts with "CONSULTA", o sea DEMANDA
     elif response['choices'][0]['message']['content'].startswith('CONSULTA'):
-        # get the response after it finds '\n'
+        # get the response after it finds the first '\n', but keep the rest of the message
         print(response['choices'][0]['message']['content'])
-        response = response['choices'][0]['message']['content'].split('\n')[1]
+        response = response['choices'][0]['message']['content'].split('\n', 1)[1]
 
 
         #activá esto si vas a correr el programa localmente. si no, desactivá esto y activá las dos líneas de abajo
