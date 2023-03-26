@@ -19,6 +19,16 @@ body {
   background-image: url("bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
+  background-attachment: fixed; /* Added */
+  height: 100%;
+  width: 100%; /* Added */
+}
+
+#section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Updated */
 }
 
 #app-container {
@@ -34,8 +44,8 @@ body {
   gap: 63px;
 
   position: relative;
-  width: 100vw;
-  height: 100vh;
+  max-width: 100%;
+  width: 100%;
 }
 /* hide  scrollbar */
 #results::-webkit-scrollbar {
@@ -52,7 +62,6 @@ body {
   padding: 0px;
   gap: 32px;
   max-height: 80vh;
-  
 
   /* Inside auto layout */
 
@@ -60,7 +69,7 @@ body {
   order: 0;
   flex-grow: 0;
 }
-#results{
+#results {
   display: none;
   max-height: 50vh;
   overflow: scroll;
@@ -85,8 +94,7 @@ body {
   flex-grow: 0;
 }
 
-a.phone-link{
-  
+a.phone-link {
   display: inline-block;
   color: white;
   background: #14728c;
@@ -125,8 +133,8 @@ a.phone-link{
   padding: 0px;
   gap: 36px;
 
-  width: 492px;
-  height: 32.5px;
+  width: auto;
+  height: auto;
 
   /* Inside auto layout */
 
@@ -144,7 +152,7 @@ a.phone-link{
   padding: 0px;
   gap: 10px;
 
-  width: 424px;
+  width: auto;
   height: 25px;
 
   /* Inside auto layout */
@@ -153,7 +161,7 @@ a.phone-link{
   order: 0;
   flex-grow: 1;
 }
-input{
+input {
   width: 100%;
   height: 100%;
   border: none;
@@ -176,7 +184,7 @@ input::placeholder {
   line-height: 25px;
 }
 .message-input button {
- /* no style */
+  /* no style */
   background: none;
   border: none;
   outline: none;
@@ -184,14 +192,14 @@ input::placeholder {
 .message-input button:hover {
   /* no style */
   cursor: pointer;
- }
+}
 .input-field button img {
   /* Vector */
 
   width: 32px;
   height: 32.5px;
 
-  border: 1px solid ;
+  border: 1px solid;
 
   /* Inside auto layout */
 
@@ -200,18 +208,143 @@ input::placeholder {
   flex-grow: 0;
 }
 
+form{
+  width: 100%;
+}
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    transition: background-color 5000s ease-in-out 0s;
-    color: #080f30;
-    -webkit-text-fill-color:#080f30 !important
+  transition: background-color 5000s ease-in-out 0s;
+  color: #080f30;
+  -webkit-text-fill-color: #080f30 !important;
 }
 
-
-.loading{
+.loading {
   width: 32px;
   height: 32px;
   filter: invert(1) sepia(1) hue-rotate(120deg);
+}
+
+textarea {
+  font-size: 18px;
+  line-height: 150%;
+  width: auto;
+  height: auto;
+  font-family: "Jakarta Extra Bold";
+  outline: none;
+  color: #080f30;
+  background: none;
+  border: none;
+  resize: none;
+}
+
+/* hide textarea scrollbar */
+textarea::-webkit-scrollbar {
+  display: none;
+}
+
+/* placeholder */
+textarea::placeholder {
+  font-size: 18px;
+  line-height: 150%;
+  font-family: "Jakarta Light Italic";
+  color: #080f30;
+}
+
+.clear-button {
+  background: none;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+
+/* ++++++++++++++++++ mobile +++++++++++++++++++ */
+@media screen and (max-width: 768px) {
+  #app-container {
+    flex-direction: column;
+    gap: 0px;
+    justify-content: end;
+  }
+
+  #section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Updated */
+  }
+
+  #main-interface {
+    width: 100%;
+    gap: 0px;
+    max-height: 100%;
+  }
+  .app-main {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: rgb(255, 255, 255, 0.26%);
+    padding: 16px 16px 16px 16px;
+    font-size: 18px;
+    display: flex;
+    flex-flow: column-reverse;
+    border: none;
+    border-radius: 0px;
+    width: 100%;
+  }
+  textarea {
+    font-size: 18px;
+    line-height: 150%;
+    width: auto;
+    height: auto;
+    font-family: "Jakarta Extra Bold";
+    outline: none;
+    color: #080f30;
+    background: none;
+    border: none;
+    resize: none;
+  }
+  /* hide textarea scrollbar */
+  textarea::-webkit-scrollbar {
+    display: none;
+  }
+
+  .input-field {
+    width: auto;
+    height: auto;
+  }
+  form {
+    width: 100%;
+  }
+  .message-input {
+    width: 100%;
+  }
+  /* placeholder */
+  textarea::placeholder {
+    font-size: 18px;
+    line-height: 150%;
+    font-family: "Jakarta Light Italic";
+    color: #080f30;
+  }
+  /* title horizontally centered and near the top */
+  .title-container {
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    top: 10%;
+  }
+
+  .app-title {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    font-size: 16px;
+    line-height: 150%;
+    width: 350px;
+  }
 }

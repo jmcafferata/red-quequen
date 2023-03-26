@@ -29,7 +29,6 @@ def write_csv_to_gcs(df, file_name):
 
 def check_and_compute_cosine_similarity(x, message_vector):
     x = np.array(literal_eval(x), dtype=np.float64)  # Convert x to float64
-    print(f"x data type: {x.dtype}, shape: {x.shape}")
     return cosine_similarity(x, message_vector)
 
 
@@ -63,14 +62,16 @@ def get_information(message):
     # sort by similarity
     oferta_sim = oferta_sim.sort_values(by=['similarity'], ascending=False)
 
-    prompt = 'Sos un bot argentino, buena onda y amable (con dialecto argentino) que tiene información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada:\n\n'+oferta_df[['fecha','mensaje']].head(20).to_string(index=False)+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable. Te divierte que Quequén comience a ser libre finalmente de toda autoridad."'
+    now = datetime.now()
+
+    prompt = 'Sos un bot argentino, buena onda y amable (con dialecto argentino) que tiene información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada:\n\n'+oferta_df[['fecha','mensaje']].head(20).to_string(index=False)+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable. Te divierte que Quequén comience a ser libre finalmente de toda autoridad."'
     
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
         {"role": "user", "content": prompt}],
     )
-    now = datetime.now()
+    
 
     # if the response starts with "INGRESO", o sea OFERTA
     if response['choices'][0]['message']['content'].startswith('INGRESO'):
@@ -125,4 +126,4 @@ def index():
 
     return render_template('index.html')
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
