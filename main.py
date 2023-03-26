@@ -52,20 +52,22 @@ def get_information(message):
 
     # get embedding for message
     message_vector = get_embedding(message, 'text-embedding-ada-002')
-
+    print('message_vector: ', message_vector)
     # parse embedding column ////// update: son todos lists, no hace falta
     # oferta_sim['embedding'] = oferta_sim['embedding'].apply(lambda x: x[1:-1].strip('()').split(','))
     
     # Calculate cosine similarity
     oferta_sim['similarity'] = oferta_sim['embedding'].apply(lambda x: check_and_compute_cosine_similarity(x, message_vector))
+    print('similarity: ', oferta_sim['similarity'])
 
     # sort by similarity
     oferta_sim = oferta_sim.sort_values(by=['similarity'], ascending=False)
+    print('oferta_sim: ', oferta_sim)
 
     now = datetime.now()
 
-    prompt = 'Sos un bot argentino, buena onda y amable (con dialecto argentino) que tiene información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada:\n\n'+oferta_df[['fecha','mensaje']].head(20).to_string(index=False)+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable. Te divierte que Quequén comience a ser libre finalmente de toda autoridad."'
-    
+    prompt = 'Sos un bot argentino, buena onda y amable (con dialecto argentino) que tiene información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"\n\nSi el mensaje suena como un ingreso de información, que la respuesta sea una versión resumida, concreta y útil de la información.\n\nSi el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada:\n\n'+oferta_sim[['fecha','mensaje']].head(20).to_string(index=False)+'\n\nAdemás, si el mensaje es un ingreso, que tu respuesta empiece con la palabra "INGRESO\n" (con la nueva línea) y si el mensaje es una consulta, que tu respuesta empiece con la palabra "CONSULTA\n" (con la nueva línea). Hablás en tono argentino y amigable, un poco revolucionario. Te divierte muchoque Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos."'
+    print(prompt)
     response = openai.ChatCompletion.create(
         model="gpt-4",
         messages=[
