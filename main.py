@@ -41,21 +41,20 @@ def get_information(message):
     # open vendors.csv
     THIS_FOLDER = Path(__file__).parent.resolve()
 
+    # THE JUICE
     # activá esto si vas a correr el programa localmente. si no, desactivá esto y activá las dos líneas de abajo
     # mensajes_file = THIS_FOLDER / "mensajes.csv"
     # mensajes_df = pd.read_csv(mensajes_file, sep='|', encoding='utf-8')
-    # mensajes_sim = mensajes_df
 
     # desactivá esto si vas a correr el programa localmente. si no, activá esto y desactivá las dos líneas de arriba
     # Read CSV from GCS
     mensajes_df = read_csv_from_gcs("mensajes.csv")
-    mensajes_sim = mensajes_df
 
+
+    mensajes_sim = mensajes_df
     # get embedding for message
     message_vector = get_embedding(message, 'text-embedding-ada-002')
-    # parse embedding column ////// update: son todos lists, no hace falta
-    # mensajes_sim['embedding'] = mensajes_sim['embedding'].apply(lambda x: x[1:-1].strip('()').split(','))
-    
+
     # Calculate cosine similarity
     mensajes_sim['similarity'] = mensajes_sim['embedding'].apply(lambda x: check_and_compute_cosine_similarity(x, message_vector))
     print('similarity: ', mensajes_sim['similarity'])
@@ -72,7 +71,7 @@ def get_information(message):
         mensajes += str(row['fecha']) + ' - ' + str(row['mensaje']) + '\n\n'
         
 
-    prompt = 'Sos Red Quequén, un bot argentino, buena onda y amable (con dialecto argentino) que recibe y entrega información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%A %d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"Si el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada. Cada mensaje tiene la fecha y hora en que la persona lo envió, y eso también es útil para informar.\n\n'+mensajes+'\n\nHablás en tono argentino (a menos que te hablen en un idioma que no sea castellano) y amigable, un poco revolucionario. Te divierte mucho que Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos. Recordale a la gente que agregue información útil para que Quequén prospere. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje."'
+    prompt = 'Sos Red Quequén, un bot argentino, buena onda y amable (con dialecto argentino) que recibe y entrega información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%A %d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"Si el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada. Cada mensaje tiene la fecha y hora en que la persona lo envió, y eso también es útil para informar.\n\n'+mensajes+'\n\nHablás en tono argentino (a menos que te hablen en un idioma que no sea castellano) y amigable, un poco revolucionario. Te divierte mucho que Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos. Recordale a la gente que agregue información útil para que Quequén prospere. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje. En tu respuesta, envolvé los links en tag <a class=link href=[el link]> y los numeros de telefono en tags <span class=phone>."'
     print(prompt)
     response = openai.ChatCompletion.create(
         model="gpt-4",
@@ -92,7 +91,8 @@ def get_information(message):
 
     # desactivá esto si vas a correr el programa localmente. si no, activá esto y desactivá las dos líneas de arriba
     # use pandas.concat to add the response (which is a csv row of mensaje,nombre,telefono) to the csv in utf-8
-    mensajes_df = mensajes_df.append({'fecha': now.strftime("%d/%m/%Y %H:%M:%S"), 'mensaje': message, 'embedding': str(message_vector)}, ignore_index=True)
+    new_row = pd.DataFrame({"fecha": [now.strftime("%d/%m/%Y %H:%M:%S")], "mensaje": [message], "embedding": [str(message_vector)]})
+    mensajes_df = pd.concat([mensajes_df, new_row], ignore_index=True)    
     write_csv_to_gcs(mensajes_df, "mensajes.csv")
 
     return response
