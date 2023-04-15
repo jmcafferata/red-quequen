@@ -31,15 +31,21 @@
                 oninput="autoResizeTextarea()"
                 onkeydown="handleEnter(event)"
               ></textarea>
-              <button class="clear-button" type="button" style="display: none" 
-              onclick="autoResizeTextarea()">
-                <img src="static/clear.png" alt="clear" />
-              </button>
+              <div class="buttons">
+                <button
+                  class="clear-button"
+                  type="button"
+                  style="display: none"
+                  onclick="autoResizeTextarea()"
+                >
+                  <img src="static/clear.png" alt="clear" />
+                </button>
 
-              <!-- Search button with png icon -->
-              <button id="search">
-                <img src="static/search.png" alt="search" />
-              </button>
+                <!-- Search button with png icon -->
+                <button id="search">
+                  <img src="static/search.png" alt="search" />
+                </button>
+              </div>
             </div>
           </form>
           <div id="results"></div>
@@ -48,7 +54,6 @@
     </div>
 
     <script>
-      
       $(document).ready(function () {
         $("form").on("submit", function (event) {
           event.preventDefault();
@@ -109,8 +114,6 @@
         textarea.style.height = "25px"; // Reset the height
         textarea.style.height = textarea.scrollHeight + "px"; // Set the height to match the scroll height
       }
-      
-      
     </script>
   </body>
 </html>

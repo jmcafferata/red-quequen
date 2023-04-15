@@ -154,10 +154,10 @@ textarea{
 
   /* Inside auto layout */
 
-  flex: none;
-  order: 0;
-  align-self: stretch;
-  flex-grow: 0;
+}
+.buttons{
+  display: flex;
+  flex-direction: row;
 }
 .input-field {
   /* Auto layout */
@@ -250,6 +250,7 @@ textarea {
   background: none;
   border: none;
   resize: none;
+  flex-grow: 1;
 }
 
 /* hide textarea scrollbar */

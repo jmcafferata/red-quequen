@@ -48,7 +48,7 @@ def get_information(message,is_admin):
 
     now = datetime.now(timezone)
     
-    mensajes = 'Mensajes previos:\n\n'
+    mensajes = ''
 
     for index, row in mensajes_sim[['fecha', 'mensaje']].head(30).iterrows():
         mensajes += str(row['fecha']) + ' - ' + str(row['mensaje']) + '\n\n'
