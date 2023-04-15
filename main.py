@@ -30,16 +30,14 @@ def get_information(message,is_admin):
     # open vendors.csv
     THIS_FOLDER = Path(__file__).parent.resolve()
 
+    # THE JUICE
     # activá esto si vas a correr el programa localmente. si no, desactivá esto y activá las dos líneas de abajo
     mensajes_file = THIS_FOLDER / "mensajes.csv"
     mensajes_df = pd.read_csv(mensajes_file, sep='|', encoding='utf-8')
     mensajes_sim = mensajes_df
-
     # get embedding for message
     message_vector = get_embedding(message, 'text-embedding-ada-002')
-    # parse embedding column ////// update: son todos lists, no hace falta
-    # mensajes_sim['embedding'] = mensajes_sim['embedding'].apply(lambda x: x[1:-1].strip('()').split(','))
-    
+
     # Calculate cosine similarity
     mensajes_sim['similarity'] = mensajes_sim['embedding'].apply(lambda x: check_and_compute_cosine_similarity(x, message_vector))
     print('similarity: ', mensajes_sim['similarity'])
