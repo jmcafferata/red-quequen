@@ -16,7 +16,7 @@
     <div class="content-wrapper">
       <div class="title-container">
         <img class="app-logo" src="static/logo.png" alt="Red Quequén" />
-        <p>¿Qué necesitás?</p>
+        <p>Ingresá data</p>
       </div>
       <div id="app-box">
         <div class="app-main">
@@ -24,15 +24,14 @@
             <div class="message-input">
               <textarea
                 class="input-field"
-                placeholder="Preguntá"
+                placeholder="Escribí cualquier cosa"
                 type="text"
                 name="message"
                 rows="1"
-                oninput="autoResizeTextarea()"
+                oninput="autoResizeTextarea(this)"
                 onkeydown="handleEnter(event)"
               ></textarea>
-              <button class="clear-button" type="button" style="display: none" 
-              onclick="autoResizeTextarea()">
+              <button class="clear-button" type="button" style="display: none">
                 <img src="static/clear.png" alt="clear" />
               </button>
 
@@ -76,6 +75,7 @@
               // append data to the results div
               $("#results").append(data);
               console.log(data);
+              findPhoneNumbersAndConvertToLinks();
             });
           } else {
             alert("No entendí");
@@ -102,10 +102,8 @@
         }
       }
 
-      function autoResizeTextarea() {
-        console.log("resizing");
-        const textarea = document.querySelector("textarea[name=message]");
-        textarea.style.height = "25px"; // Reset the height
+      function autoResizeTextarea(textarea) {
+        textarea.style.height = "auto"; // Temporarily set the height to 'auto' to calculate the correct height
         textarea.style.height = textarea.scrollHeight + "px"; // Set the height to match the scroll height
       }
       
