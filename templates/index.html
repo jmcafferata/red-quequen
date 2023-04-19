@@ -2,9 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Red Brillo Urbano</title>
-    <!-- A chatbot that communicates with an API to give the townspeople of Quequén all the information-->
-    <link rel="stylesheet" href="static/style.css" />
+    <title>Red Roy</title>
+    <link rel="stylesheet" href="redroy/static/style.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
@@ -15,7 +14,7 @@
   <body>
     <div class="content-wrapper">
       <div class="title-container">
-        <img class="app-logo" src="static/logo.png" alt="Red Quequén" />
+        <img class="app-logo" src="redroy/static/logo.png" alt="Red Quequén" />
         <p>¿Qué necesitás?</p>
       </div>
       <div id="app-box">
@@ -38,12 +37,12 @@
                   style="display: none"
                   onclick="autoResizeTextarea()"
                 >
-                  <img src="static/clear.png" alt="clear" />
+                  <img src="redroy/static/clear.png" alt="clear" />
                 </button>
 
                 <!-- Search button with png icon -->
                 <button id="search">
-                  <img src="static/search.png" alt="search" />
+                  <img src="redroy/static/search.png" alt="search" />
                 </button>
               </div>
             </div>
@@ -61,7 +60,7 @@
           if (message.trim() !== "") {
             // replace the search button with searching.gif until the results are returned
             $("#search").html(
-              '<img class="loading" src="static/searching.gif" alt="searching" />'
+              '<img class="loading" src="redroy/static/searching.gif" alt="searching" />'
             );
             // Check if search_term is not empty
             $.ajax({
@@ -69,10 +68,10 @@
                 message: message,
               },
               type: "POST",
-              url: "/",
+              url: "/redroy/",
             }).done(function (data) {
               // replace the searching.gif with the search button
-              $("#search").html('<img src="static/search.png" alt="search" />');
+              $("#search").html('<img src="redroy/static/search.png" alt="search" />');
               // Clear the previous results
               $("#results").html("");
               $(".app-main").css("padding", "24px 36px 24px 36px");
