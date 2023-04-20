@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <base id="baseUrl" href="/">
     <meta charset="UTF-8" />
-    <title>Red Brillo Urbano</title>
-    <!-- A chatbot that communicates with an API to give the townspeople of Quequén all the information-->
+    <title>Red Roy</title>
     <link rel="stylesheet" href="static/style.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      const baseTag = document.getElementById('baseUrl');
+      const currentPath = window.location.pathname;
+      const basePath = currentPath.includes('/redroy') ? '/redroy' : '/';
+      baseTag.href = basePath;
+  </script>
   </head>
 
   <body>
+    <canvas id="animationCanvas"></canvas>
+    <script src="static/animation.js"></script>
     <div class="content-wrapper">
       <div class="title-container">
-        <img class="app-logo" src="static/logo.png" alt="Red Quequén" />
-        <p>¿Qué necesitás?</p>
+        <img class="app-image" src="static/8bit roy.png" alt="8 bit Roy" />
+        <img class="app-logo" src="static/logo.png" alt="Red Roy logo" />
+        <p>Hablale al diputado Roy Cortina</p>
       </div>
       <div id="app-box">
         <div class="app-main">
