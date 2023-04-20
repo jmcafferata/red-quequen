@@ -16,13 +16,17 @@
   src: url("PlusJakartaSans-ExtraBold.ttf");
 }
 body {
-  background-color: black;
+  background-image: url("bg.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* make the bg image scale from the bottom */
+  background-position: bottom;
+  overscroll-behavior: contain;
+  color: white;
 }
 
 .content-wrapper{
   display: flex;
-  position: relative;
-  z-index: 3;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -38,10 +42,6 @@ body {
 
 #app-main::-webkit-scrollbar {
   display: none;
-}
-.app-image{
-  max-width: 250px;
-  margin-bottom: -41px;
 }
 #app-box{
   width: 100%;
@@ -61,7 +61,6 @@ textarea{
   overflow: scroll;
   line-height: 150%;
   white-space: pre-wrap;
-  color: white;
 }
 .app-title {
   /* Find the software you need */
@@ -88,11 +87,10 @@ textarea{
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #a69f8d;
 }
 
 .app-logo{
-  max-width: 300px;
+  max-width: 200px;
   margin-bottom: 32px;
 }
 
@@ -121,19 +119,13 @@ textarea{
   /* border: 1px solid white; */
   /* padding: 3px; */
 }
-canvas {
-  display: block;
-  position: fixed;
-  z-index: 0;
-
-}
 .app-main {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 24px 36px 24px 36px;
   gap: 36px;
-  border: solid 1px #a69f8d;
+  border: solid 1px #cebf6d;
   width: 564px;
   font-family: "Jakarta Regular";
   background: rgba(31, 38, 51, 0.01);
