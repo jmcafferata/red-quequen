@@ -5,6 +5,3 @@ key.json
 ai_key.txt
 my_venv
 .gcloudignore
-openai_api_key.txt
-input/
-vectorized/
