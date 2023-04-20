@@ -1,21 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <base id="baseUrl" href="/">
     <meta charset="UTF-8" />
     <title>Red Roy</title>
-    <link rel="stylesheet" href="redroy/static/style.css" />
+    <link rel="stylesheet" href="static/style.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+      const baseTag = document.getElementById('baseUrl');
+      const currentPath = window.location.pathname;
+      const basePath = currentPath.includes('/redroy') ? '/redroy' : '/';
+      baseTag.href = basePath;
+  </script>
   </head>
 
   <body>
+    <canvas id="animationCanvas"></canvas>
+    <script src="static/animation.js"></script>
     <div class="content-wrapper">
       <div class="title-container">
-        <img class="app-logo" src="redroy/static/logo.png" alt="Red Quequén" />
-        <p>¿Qué necesitás?</p>
+        <img class="app-image" src="static/8bit roy.png" alt="8 bit Roy" />
+        <img class="app-logo" src="static/logo.png" alt="Red Roy logo" />
+        <p>Hablale al diputado Roy Cortina</p>
       </div>
       <div id="app-box">
         <div class="app-main">
@@ -37,12 +47,12 @@
                   style="display: none"
                   onclick="autoResizeTextarea()"
                 >
-                  <img src="redroy/static/clear.png" alt="clear" />
+                  <img src="static/clear.png" alt="clear" />
                 </button>
 
                 <!-- Search button with png icon -->
                 <button id="search">
-                  <img src="redroy/static/search.png" alt="search" />
+                  <img src="static/search.png" alt="search" />
                 </button>
               </div>
             </div>
@@ -60,7 +70,7 @@
           if (message.trim() !== "") {
             // replace the search button with searching.gif until the results are returned
             $("#search").html(
-              '<img class="loading" src="redroy/static/searching.gif" alt="searching" />'
+              '<img class="loading" src="static/searching.gif" alt="searching" />'
             );
             // Check if search_term is not empty
             $.ajax({
@@ -68,10 +78,10 @@
                 message: message,
               },
               type: "POST",
-              url: "/redroy/",
+              url: "/",
             }).done(function (data) {
               // replace the searching.gif with the search button
-              $("#search").html('<img src="redroy/static/search.png" alt="search" />');
+              $("#search").html('<img src="static/search.png" alt="search" />');
               // Clear the previous results
               $("#results").html("");
               $(".app-main").css("padding", "24px 36px 24px 36px");
