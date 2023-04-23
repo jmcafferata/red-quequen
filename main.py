@@ -7,7 +7,6 @@ from openai.embeddings_utils import cosine_similarity
 from pathlib import Path
 import os
 from datetime import datetime
-from google.cloud import storage
 from io import StringIO
 from ast import literal_eval
 import pytz
@@ -16,19 +15,6 @@ timezone = pytz.timezone('America/Argentina/Buenos_Aires')
 
 app = Flask(__name__)
 
-# Set Google Cloud Storage credentials (si vas a correr el programa localmente, sacá esto)
-# GCS_CLIENT = storage.Client().from_service_account_json('key.json')
-# BUCKET = GCS_CLIENT.get_bucket("red-quequen.appspot.com")
-
-# Estas dos funciones son para leer y escribir archivos en GCS (si vas a correr el programa localmente, sacalas)
-# def read_csv_from_gcs(file_name):
-#     blob = BUCKET.blob(file_name)
-#     csv_str = blob.download_as_string()
-#     return pd.read_csv(StringIO(csv_str.decode('utf-8')), sep='|', encoding='utf-8')
-    
-# def write_csv_to_gcs(df, file_name):
-#     blob = BUCKET.blob(file_name)
-#     blob.upload_from_string(df.to_csv(sep='|', encoding='utf-8', index=False), 'text/csv')
 
 def check_and_compute_cosine_similarity(x, message_vector):
     x = np.array(literal_eval(x), dtype=np.float64)  # Convert x to float64
@@ -36,24 +22,23 @@ def check_and_compute_cosine_similarity(x, message_vector):
 
 
 def get_information(message):
+
+    now = datetime.now(timezone)
+
     # Set OpenAI API key
     openai.api_key_path = "ai_key.txt"
-    # open vendors.csv
     THIS_FOLDER = Path(__file__).parent.resolve()
 
-    # THE JUICE
-    # activá esto si vas a correr el programa localmente. si no, desactivá esto y activá las dos líneas de abajo
     mensajes_file = THIS_FOLDER / "mensajes.csv"
     mensajes_df = pd.read_csv(mensajes_file, sep='|', encoding='utf-8')
 
-    # desactivá esto si vas a correr el programa localmente. si no, activá esto y desactivá las dos líneas de arriba
-    # Read CSV from GCS
-    # mensajes_df = read_csv_from_gcs("mensajes.csv")
-
-
     mensajes_sim = mensajes_df
-    # get embedding for message
+
     message_vector = get_embedding(message, 'text-embedding-ada-002')
+    
+    with open(mensajes_file, 'a', encoding='utf-8') as f:
+    #write the date, message and embedding
+        f.write(now.strftime("%d/%m/%Y %H:%M:%S")+'|'+message+'|'+str(message_vector)+'\n')
 
     # Calculate cosine similarity
     mensajes_sim['similarity'] = mensajes_sim['embedding'].apply(lambda x: check_and_compute_cosine_similarity(x, message_vector))
@@ -63,7 +48,6 @@ def get_information(message):
     mensajes_sim = mensajes_sim.sort_values(by=['similarity'], ascending=False)
     print('mensajes_sim: ', mensajes_sim)
 
-    now = datetime.now(timezone)
     
     mensajes = 'Mensajes previos:\n\n'
 
@@ -82,18 +66,6 @@ def get_information(message):
     print(response['choices'][0]['message']['content'])
     response = response['choices'][0]['message']['content']
 
-
-    #activá esto si vas a correr el programa localmente. si no, desactivá esto y activá las dos líneas de abajo
-    # add the response (which is a csv row of mensaje,nombre,telefono) to the csv in utf-8
-    with open(mensajes_file, 'a', encoding='utf-8') as f:
-        #write the date, message and embedding
-        f.write(now.strftime("%d/%m/%Y %H:%M:%S")+'|'+message+'|'+str(message_vector)+'\n')
-
-    # desactivá esto si vas a correr el programa localmente. si no, activá esto y desactivá las dos líneas de arriba
-    # use pandas.concat to add the response (which is a csv row of mensaje,nombre,telefono) to the csv in utf-8
-    # new_row = pd.DataFrame({"fecha": [now.strftime("%d/%m/%Y %H:%M:%S")], "mensaje": [message], "embedding": [str(message_vector)]})
-    # mensajes_df = pd.concat([mensajes_df, new_row], ignore_index=True)    
-    # write_csv_to_gcs(mensajes_df, "mensajes.csv")
 
     return response
     

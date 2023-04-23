@@ -3,19 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <title>Red Quequén</title>
-    <!-- A chatbot that communicates with an API to give the townspeople of Quequén all the information-->
+    <!-- Un chatbot para compartir información sobre algo -->
     <link rel="stylesheet" href="static/style.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
+    
+    <script>
+      try {
+        const baseTag = document.getElementById('baseUrl');
+        const currentPath = window.location.pathname;
+        // poner en las dos primeras barras el nombre del subdirectorio donde se instala
+        const basePath = currentPath.includes('/') ? '/' : '/';
+        baseTag.href = basePath;
+      } catch (e) {
+        console.log(e);
+      }
+  </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
 
   <body>
     <div class="content-wrapper">
       <div class="title-container">
-        <img class="app-logo" src="static/logo.png" alt="Red Quequén" />
+        <img class="app-logo" src="static/logo.png" alt="Logo" />
         <p>Todo lo que digas por acá es abierto y público</p>
       </div>
       <div id="app-box">
@@ -31,6 +43,7 @@
                 oninput="autoResizeTextarea(this)"
                 onkeydown="handleEnter(event)"
               ></textarea>
+              <div class="buttons">
               <button class="clear-button" type="button" style="display: none">
                 <img src="static/clear.png" alt="clear" />
               </button>
@@ -39,6 +52,7 @@
               <button id="search">
                 <img src="static/search.png" alt="search" />
               </button>
+              </div>
             </div>
           </form>
           <div id="results"></div>
@@ -76,7 +90,6 @@
               // append data to the results div
               $("#results").append(data);
               console.log(data);
-              findPhoneNumbersAndConvertToLinks();
             });
           } else {
             alert("No entendí");
@@ -104,24 +117,8 @@
       }
 
       function autoResizeTextarea(textarea) {
-        textarea.style.height = "auto"; // Temporarily set the height to 'auto' to calculate the correct height
+        textarea.style.height = "25px"; // Temporarily set the height to 'auto' to calculate the correct height
         textarea.style.height = textarea.scrollHeight + "px"; // Set the height to match the scroll height
-      }
-      function findPhoneNumbersAndConvertToLinks() {
-        const phoneRegex =
-          /(?<!\/)(\+?\d{1,4}[-.\s]?)?((\d{1,3}[-.\s]?){1,3}\d{1,4})[-.\s]?(\d{1,4}[-.\s]?){1,2}\d{1,4}/g;
-        const div = document.getElementById("results");
-        const content = div.innerHTML;
-        const replacedContent = content.replace(phoneRegex, function (match) {
-          return (
-            '<a class="phone-link" href="tel:' +
-            match.replace(/[-.\s]/g, "") +
-            '">' +
-            match +
-            "</a>"
-          );
-        });
-        div.innerHTML = replacedContent;
       }
     </script>
   </body>
