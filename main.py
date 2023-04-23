@@ -10,6 +10,7 @@ from datetime import datetime
 from io import StringIO
 from ast import literal_eval
 import pytz
+import config
 timezone = pytz.timezone('America/Argentina/Buenos_Aires')
 
 
@@ -21,7 +22,7 @@ def check_and_compute_cosine_similarity(x, message_vector):
     return cosine_similarity(x, message_vector)
 
 
-def get_information(message):
+def get_information(message,isadmin):
 
     now = datetime.now(timezone)
 
@@ -53,18 +54,19 @@ def get_information(message):
     for index, row in mensajes_sim[['fecha', 'mensaje']].head(30).iterrows():
         mensajes += str(row['fecha']) + ' - ' + str(row['mensaje']) + '\n\n'
         
-    system = """Sos Count Basie, un bot argentino, buena onda, amable e irreverente (con dialecto argentino) que recibe y entrega información sobre la orquesta de jazz "Brillo Urbano Big Band".
-    La gente te da información o te pide información y vos respondés acordemente. 
-    Hoy es """+now.strftime("%A %d/%m/%Y %H:%M:%S")+"""
+    system = config.personalidad + """
     
-    Usar los siguientes datos para responder:
+    Hoy es """+now.strftime("%A %d/%m/%Y %H:%M:%S")+ """Mi mensaje para vos es el siguiente:
 
-    """+mensajes+"""
-    
-    Hablás en tono argentino (a menos que te hablen en un idioma que no sea castellano) y amigable. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje.
-    
-    En tu respuesta, envolvé los links en tag <a class=link href=[el link]> y los numeros de telefono en tags <span class=phone>."""
-    
+"""+message+"""
+
+Si el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada. Cada mensaje tiene la fecha y hora en que la persona lo envió, y eso también es útil para informar.
+
+"""+mensajes+"""
+
+Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos.  En tu respuesta, envolvé los links en tag <a class=link href=[el link]> y los numeros de telefono en tags <span class=phone>."""
+
+
     prompt = message
     
     response = openai.ChatCompletion.create(

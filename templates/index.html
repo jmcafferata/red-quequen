@@ -40,7 +40,7 @@
                 type="text"
                 name="message"
                 rows="1"
-                oninput="autoResizeTextarea()"
+                oninput="autoResizeTextarea(this)"
                 onkeydown="handleEnter(event)"
               ></textarea>
               <div class="buttons">
@@ -73,7 +73,7 @@
             // Check if search_term is not empty
             $.ajax({
               data: {
-                message: message,
+                message: message
               },
               type: "POST",
               url: "/",
