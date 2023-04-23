@@ -31,7 +31,6 @@ def get_information(message):
 
     mensajes_file = THIS_FOLDER / "mensajes.csv"
     mensajes_df = pd.read_csv(mensajes_file, sep='|', encoding='utf-8')
-
     mensajes_sim = mensajes_df
 
     message_vector = get_embedding(message, 'text-embedding-ada-002')
@@ -49,17 +48,29 @@ def get_information(message):
     print('mensajes_sim: ', mensajes_sim)
 
     
-    mensajes = 'Mensajes previos:\n\n'
+    mensajes = ''
 
     for index, row in mensajes_sim[['fecha', 'mensaje']].head(30).iterrows():
         mensajes += str(row['fecha']) + ' - ' + str(row['mensaje']) + '\n\n'
         
+    system = """Sos Count Basie, un bot argentino, buena onda, amable e irreverente (con dialecto argentino) que recibe y entrega información sobre la orquesta de jazz "Brillo Urbano Big Band".
+    La gente te da información o te pide información y vos respondés acordemente. 
+    Hoy es """+now.strftime("%A %d/%m/%Y %H:%M:%S")+"""
+    
+    Usar los siguientes datos para responder:
 
-    prompt = 'Sos Red Quequén, un bot argentino, buena onda y amable (con dialecto argentino) que recibe y entrega información sobre el pueblo de Quequén. La gente te da información o te pide información y vos respondés acordemente. Hoy es '+now.strftime("%A %d/%m/%Y %H:%M:%S")+'.\nMi mensaje para vos es el siguiente.\n\n"'+message+'"Si el mensaje suena como una consulta (la gente lo puede usar como si fuera una query de Google, ejemplo "panaderia abierta"), responder con información clara, precisa y que ayude usando la siguiente información previamente ingresada. Cada mensaje tiene la fecha y hora en que la persona lo envió, y eso también es útil para informar.\n\n'+mensajes+'\n\nHablás en tono argentino (a menos que te hablen en un idioma que no sea castellano) y amigable, un poco revolucionario. Te divierte mucho que Quequén comience a ser libre finalmente de toda autoridad. Por favor, las fechas que estén en un formato humano (como "hoy" o "ayer"). Reservar el uso de números para precios y teléfonos. Recordale a la gente que agregue información útil para que Quequén prospere. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje. En tu respuesta, envolvé los links en tag <a class=link href=[el link]> y los numeros de telefono en tags <span class=phone>."'
-    print(prompt)
+    """+mensajes+"""
+    
+    Hablás en tono argentino (a menos que te hablen en un idioma que no sea castellano) y amigable. Usá emojis irónicos y graciosos! Si alguien te habla en otro lenguaje, como francés o inglés, respondé en el otro lenguaje.
+    
+    En tu respuesta, envolvé los links en tag <a class=link href=[el link]> y los numeros de telefono en tags <span class=phone>."""
+    
+    prompt = message
+    
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
+            {"role": "system", "content": system},
         {"role": "user", "content": prompt}],
     )
         
@@ -75,11 +86,27 @@ def index():
     if request.method == 'POST':
         message = request.form.get('message')
         if message:  # Check if search_term is not None
-            response = get_information(message)
+            response = get_information(message,False)
             return jsonify(response)
         else:
             return jsonify({"error": "¡No entendí!"})
 
     return render_template('index.html')
+
+
+@app.route('/admin', methods=['GET', 'POST'])
+def admin():
+    if request.method == 'POST':
+        message = request.form.get('message')
+        if message:  # Check if search_term is not None
+            response = get_information(message,True)
+            return jsonify(response)
+        else:
+            return jsonify({"error": "¡No entendí!"})
+
+    return render_template('admin.html')
+
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

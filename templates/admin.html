@@ -2,33 +2,21 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Red Quequén</title>
-    <!-- Un chatbot para compartir información sobre algo -->
+    <title>Red Brillo Urbano</title>
+    <!-- A chatbot that communicates with an API to give the townspeople of Quequén all the information-->
     <link rel="stylesheet" href="static/style.css" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    
-    <script>
-      try {
-        const baseTag = document.getElementById('baseUrl');
-        const currentPath = window.location.pathname;
-        // poner en las dos primeras barras el nombre del subdirectorio donde se instala
-        const basePath = currentPath.includes('/') ? '/' : '/';
-        baseTag.href = basePath;
-      } catch (e) {
-        console.log(e);
-      }
-  </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
 
   <body>
     <div class="content-wrapper">
       <div class="title-container">
-        <img class="app-logo" src="static/logo.png" alt="Logo" />
-        <p>Todo lo que digas por acá es abierto y público</p>
+        <img class="app-logo" src="static/logo.png" alt="Red Quequén" />
+        <p>Ingresá data</p>
       </div>
       <div id="app-box">
         <div class="app-main">
@@ -36,14 +24,13 @@
             <div class="message-input">
               <textarea
                 class="input-field"
-                placeholder="Preguntá"
+                placeholder="Escribí cualquier cosa"
                 type="text"
                 name="message"
                 rows="1"
-                oninput="autoResizeTextarea()"
+                oninput="autoResizeTextarea(this)"
                 onkeydown="handleEnter(event)"
               ></textarea>
-              <div class="buttons">
               <button class="clear-button" type="button" style="display: none">
                 <img src="static/clear.png" alt="clear" />
               </button>
@@ -52,7 +39,6 @@
               <button id="search">
                 <img src="static/search.png" alt="search" />
               </button>
-              </div>
             </div>
           </form>
           <div id="results"></div>
@@ -89,6 +75,7 @@
               // append data to the results div
               $("#results").append(data);
               console.log(data);
+              findPhoneNumbersAndConvertToLinks();
             });
           } else {
             alert("No entendí");
@@ -116,9 +103,11 @@
       }
 
       function autoResizeTextarea(textarea) {
-        textarea.style.height = "25px"; // Temporarily set the height to 'auto' to calculate the correct height
+        textarea.style.height = "auto"; // Temporarily set the height to 'auto' to calculate the correct height
         textarea.style.height = textarea.scrollHeight + "px"; // Set the height to match the scroll height
       }
+      
+      
     </script>
   </body>
 </html>
