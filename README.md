@@ -1,63 +1,53 @@
-# Red Quequén 🚀🌊🇦🇷
+# Asistente de información basado en GPT-4 🤖
 
-¡Hola! Bienvenidos al repositorio de Red Quequén, un chatbot argentino canchero, buena onda y amigable que te ayuda a compartir información sobre el pueblo de Quequén. Si sos principiante en todo esto de Python, Git, la terminal de Windows y demás, no te preocupes, acá te vamos a explicar todo paso a paso. 😉👍
+¡Hola! 👋 Este es un programa desarrollado en Python 🐍 que utiliza el modelo GPT-4 de OpenAI para brindar información relevante a partir de archivos de texto o PDF. El programa también cuenta con una interfaz web amigable para facilitar su uso. 🌐
 
-## Preparando el terreno 🏗️
+## ¿Qué hace el programa? 🧐
 
-Antes de empezar, necesitás instalar Python en tu compu. Podés descargarlo de la [página oficial de Python](https://www.python.org/downloads/). Elegí la versión que corresponda a tu sistema operativo y seguí las instrucciones de instalación. ¡No te olvides de marcar la opción de agregar Python al PATH durante la instalación! 😊
+El programa realiza las siguientes acciones:
 
-## ¿Qué es Git y cómo lo uso? 🤔
+- Toma archivos de texto (.txt) o PDF (.pdf) de una carpeta llamada input y extrae su contenido
+- Divide el contenido en fragmentos más pequeños para facilitar su procesamiento por el modelo GPT-4
+- Vectoriza cada fragmento utilizando el modelo text-embedding-ada-002 de OpenAI, lo que nos permite comparar y encontrar información relevante más adelante
+- Almacena los fragmentos vectorizados en un archivo JSON llamado output.json en la carpeta vectorized
+- El usuario puede interactuar con el programa a través de una interfaz web, donde pueden ingresar consultas o preguntas
+- El programa busca en los fragmentos vectorizados almacenados y devuelve la información más relevante según la consulta del usuario
 
-Git es una herramienta que nos permite llevar un control de cambios en nuestros proyectos y colaborar con otros desarrolladores. Para usarlo, primero tenés que instalarlo desde la [página oficial de Git](https://git-scm.com/downloads).
+## Instalación y configuración 🛠️
 
-Una vez instalado, abrí la terminal de Windows (CMD) o la consola Git Bash (si elegiste instalarla) y asegurate de que git esté instalado correctamente ejecutando `git --version`. Te debería mostrar la versión de Git que instalaste.
+Para instalar y configurar el programa, sigue los siguientes pasos:
 
-## Clonando el repositorio 🧪
+1. Asegúrate de tener instalado Python 3.x en tu computadora
+2. Instala las bibliotecas requeridas ejecutando el siguiente comando en tu terminal o símbolo del sistema:
 
-Para obtener una copia del proyecto en tu compu, vamos a clonar el repositorio. Ejecutá el siguiente comando en la terminal:
+   ```
+   pip install -r requirements.txt
+   ```
+   
+3. Coloca tus archivos de texto o PDF en la carpeta input
+4. Ejecuta el siguiente comando para vectorizar el contenido de los archivos y almacenarlos en el archivo output.json:
 
-```
-git clone https://github.com/tu_usuario/red_quequen.git
-```
+   ```
+   python vectorize.py
+   ```
+   
+5. Inicia la aplicación web ejecutando el siguiente comando:
 
-Reemplazá "tu_usuario" con tu nombre de usuario de GitHub. Ahora tendrías una copia del proyecto en tu compu en la carpeta "red_quequen".
+   ```
+   python app.py
+   ```
+   
+6. Abre tu navegador y visita [http://localhost:5000](http://localhost:5000) para comenzar a interactuar con el programa
 
-## Instalando las dependencias 📦
+## Interfaz web 🌟
 
-Para que Red Quequén funcione correctamente, necesitamos instalar algunas bibliotecas de Python. Para hacerlo, navegá a la carpeta del proyecto en la terminal usando el comando `cd`:
+La aplicación cuenta con dos páginas web:
 
-```
-cd red_quequen
-```
+- La página principal te permitirá realizar consultas y obtener respuestas a tus preguntas
+- La página de administrador (accesible en [http://localhost:5000/admin](http://localhost:5000/admin)) ofrece funcionalidades adicionales para usuarios avanzados
 
-Ahora, vamos a instalar las dependencias ejecutando el siguiente comando:
+## Importante 💡
 
-```
-pip install -r requirements.txt
-```
+Este programa está diseñado para brindar información relevante y útil, pero es posible que no siempre sea 100% precisa. Además, el conocimiento del modelo se basa en datos hasta septiembre de 2021, por lo que puede no estar actualizado con la información más reciente.
 
-Esto instalará todas las bibliotecas necesarias para que el proyecto funcione. ¡Ya casi estamos! 🎉
-
-## Configurando las claves API 🔑
-
-Red Quequén utiliza la API de OpenAI para generar respuestas a las preguntas. Para que funcione, necesitás obtener una clave API de OpenAI. Podés obtenerla creando una cuenta en [OpenAI](https://beta.openai.com/signup/) y siguiendo las instrucciones para obtener tu clave.
-
-Una vez que tengas la clave, creá un archivo llamado `ai_key.txt` en la carpeta del proyecto y pegá la clave API dentro del archivo. Guardá y cerrá el archivo.
-
-## ¡A probar el chatbot! 🤖
-
-Con todo listo, ahora sí podemos probar el chatbot. Ejecutá el siguiente comando en la terminal:
-
-```
-python app.py
-```
-
-Esto iniciará el servidor de Flask y podrás acceder al chatbot desde tu navegador web. Abrí tu navegador y navegá a `http://localhost:5000`. ¡Listo! Ahora podés empezar a chatear con Red Quequén y compartir información sobre el pueblo. 🏘️🌅
-
-## ¿Cómo colaborar? 🤝
-
-Si querés colaborar con el proyecto, podés hacerlo a través de GitHub. Creá una cuenta (si aún no la tenés), hacé un "fork" del repositorio (esto crea una copia del proyecto en tu cuenta de GitHub), realizá los cambios que quieras y luego enviá un "pull request" para que los cambios sean revisados y, eventualmente, incorporados al proyecto original.
-
----
-
-¡Eso es todo, amigos! Esperamos que disfrutes de Red Quequén y te diviertas compartiendo información sobre el pueblo. Si tenés alguna duda o sugerencia, no dudes en contactarnos. ¡Hasta la próxima! 😄👋
+¡Diviértete explorando y obteniendo respuestas a tus preguntas! 🎉
